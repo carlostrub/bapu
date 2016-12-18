@@ -1,0 +1,6 @@
+hash: eb28466cc82a256a488c48e0b8ea2213065a47946a71bec6670ea7b4eda2f11f
+updated: 2016-12-18T22:23:33.736844472Z
+imports:
+- name: github.com/kolo/xmlrpc
+  version: 0826b98aaa29c0766956cb40d45cf7482a597671
+testImports: []
