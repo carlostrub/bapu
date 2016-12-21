@@ -1,6 +1,8 @@
-hash: eb28466cc82a256a488c48e0b8ea2213065a47946a71bec6670ea7b4eda2f11f
-updated: 2016-12-18T22:23:33.736844472Z
+hash: c0821d7a86064a86a9d00e5a0642fcc96ae57ad00d266db59676682c88c1418b
+updated: 2016-12-21T21:12:00.159023291Z
 imports:
+- name: github.com/gizak/termui
+  version: bfde399a8caee62789593f2cbbda70feee4d5553
 - name: github.com/kolo/xmlrpc
   version: 0826b98aaa29c0766956cb40d45cf7482a597671
 testImports: []

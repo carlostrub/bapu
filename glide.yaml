@@ -1,3 +1,5 @@
 package: cost.li/bapu
 import:
 - package: github.com/kolo/xmlrpc
+- package: github.com/gizak/termui
+  version: ^2.1.1
