@@ -1,6 +1,13 @@
 package main
 
-import "github.com/gizak/termui"
+import (
+	"log"
+	"os"
+	"strconv"
+
+	"github.com/gizak/termui"
+	"github.com/kolo/xmlrpc"
+)
 
 func main() {
 
@@ -20,6 +27,7 @@ func main() {
 	title.X = 1
 	title.Y = 1
 
+	// List
 	strs := []string{
 		"[0] github.com/gizak/termui",
 		"[1] [你好，世界](fg-blue)",
@@ -40,6 +48,38 @@ func main() {
 
 	termui.Render(title, ls)
 
+	apiKey := os.Getenv("BAPU_GANDI_KEY")
+	development := false
+	if os.Getenv("BAPU_DEVELOPMENT") != "" {
+		development = true
+	}
+
+	api, err := xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
+	if development {
+		api, err = xmlrpc.NewClient("https://rpc.ote.gandi.net/xmlrpc/", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	// Count number of instances
+	var paasCount *int
+	err = api.Call("paas.count", apiKey, &paasCount)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Count of Servers
+	count := termui.NewPar(strconv.Itoa(*paasCount))
+	count.Border = false
+	count.Height = 1
+	count.TextFgColor = termui.ColorMagenta
+	count.Width = 10
+	count.X = 1
+	count.Y = 2
+
+	termui.Render(count)
+
 	// Quit with q
 	termui.Handle("/sys/kbd/q", func(termui.Event) {
 		termui.StopLoop()
@@ -50,26 +90,4 @@ func main() {
 	})
 
 	termui.Loop()
-
-	//	apiKey := os.Getenv("GANDI_KEY")
-	//
-	//	//	api, err := xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
-	//	api, err := xmlrpc.NewClient("https://rpc.ote.gandi.net/xmlrpc/", nil)
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-
-	//	var result struct {
-	//		Count int `xmlrpc:"count"`
-	//	}
-
-	// Count number of instances
-	//	var paasCount *int
-	//	err = api.Call("paas.count", apiKey, &paasCount)
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-	//
-	//	fmt.Println(*paasCount)
-
 }
