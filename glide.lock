@@ -1,5 +1,5 @@
-hash: c0821d7a86064a86a9d00e5a0642fcc96ae57ad00d266db59676682c88c1418b
-updated: 2016-12-22T20:31:06.386688901Z
+hash: 9026a05a7751ce376255c3e0825adeef76341e3da7e8d79591ab0daac38e80a2
+updated: 2016-12-29T19:12:00.923232927Z
 imports:
 - name: github.com/gizak/termui
   version: bfde399a8caee62789593f2cbbda70feee4d5553
@@ -15,4 +15,6 @@ imports:
   version: ad45545899c7b13c020ea92b2072220eefad42b8
 - name: github.com/nsf/termbox-go
   version: abe82ce5fb7a42fbd6784a5ceb71aff977e09ed8
+- name: github.com/spf13/viper
+  version: 5ed0fc31f7f453625df314d8e66b9791e8d13003
 testImports: []

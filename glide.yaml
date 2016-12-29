@@ -3,3 +3,4 @@ import:
 - package: github.com/kolo/xmlrpc
 - package: github.com/gizak/termui
   version: ^2.1.1
+- package: github.com/spf13/viper
