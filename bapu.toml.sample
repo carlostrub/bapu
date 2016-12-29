@@ -1,0 +1,7 @@
+[development]
+apiKey = PUTYOURKEYHERE 
+enabled = true
+
+[production]
+apiKey = PUTYOURKEYHERE
+enabled = true

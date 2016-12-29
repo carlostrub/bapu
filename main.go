@@ -35,7 +35,7 @@ func main() {
 	}
 
 	// initialize termui
-	err := termui.Init()
+	err = termui.Init()
 	if err != nil {
 		panic(err)
 	}
@@ -89,11 +89,11 @@ func main() {
 	termui.Render(count)
 
 	// List instances
-	var paasList *int
-	err = api.Call("paas.count", apiKey, &paasCount)
-	if err != nil {
-		log.Fatal(err)
-	}
+	//	var paasList *int
+	//	err = api.Call("paas.count", apiKey, &paasCount)
+	//	if err != nil {
+	//		log.Fatal(err)
+	//	}
 
 	// Quit with q
 	termui.Handle("/sys/kbd/q", func(termui.Event) {
