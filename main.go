@@ -20,10 +20,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	apiKey := viper.GetString("production.apiKey")
-	api, err := xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
-	if err != nil {
-		log.Fatal(err)
+	var apiKey string
+	var api *xmlrpc.Client
+
+	production := viper.GetBool("production.enabled")
+	if production {
+		apiKey = viper.GetString("production.apiKey")
+		api, err = xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	development := viper.GetBool("development.enabled")
@@ -34,6 +40,10 @@ func main() {
 			log.Fatal(err)
 		}
 		apiKey = viper.GetString("development.apiKey")
+	}
+
+	if api == nil {
+		log.Fatal("neither production nor development environment enabled in config")
 	}
 
 	// initialize termui
