@@ -69,16 +69,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Count of Servers
-	count := termui.NewPar(strconv.Itoa(*paasCount))
+	count := termui.NewPar("# instances: " + strconv.Itoa(*paasCount))
 	count.Border = false
 	count.Height = 1
 	count.TextFgColor = termui.ColorMagenta
-	count.Width = 10
+	count.Width = 20
 	count.X = 1
 	count.Y = 2
 
 	termui.Render(count)
+
+	// List instances
+	var paasList *int
+	err = api.Call("paas.count", apiKey, &paasCount)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Quit with q
 	termui.Handle("/sys/kbd/q", func(termui.Event) {
