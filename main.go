@@ -1,15 +1,38 @@
 package main
 
 import (
+	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/gizak/termui"
 	"github.com/kolo/xmlrpc"
+	"github.com/spf13/viper"
 )
 
 func main() {
+	// handle configurations for server
+	viper.SetConfigName("bapu") // no need to include file extension
+	viper.AddConfigPath("")     // set the path of your config file
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Println("Config file not found...")
+	}
+	development := viper.GetBool("development.enabled")
+
+	if development {
+		fmt.Printf("\nDevelopment Config found")
+	}
+	apiKey := viper.GetString("apiKey")
+
+	api, err := xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
+	if development {
+		api, err = xmlrpc.NewClient("https://rpc.ote.gandi.net/xmlrpc/", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	// initialize termui
 	err := termui.Init()
@@ -47,20 +70,6 @@ func main() {
 	ls.Y = 4
 
 	termui.Render(title, ls)
-
-	apiKey := os.Getenv("BAPU_GANDI_KEY")
-	development := false
-	if os.Getenv("BAPU_DEVELOPMENT") != "" {
-		development = true
-	}
-
-	api, err := xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
-	if development {
-		api, err = xmlrpc.NewClient("https://rpc.ote.gandi.net/xmlrpc/", nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
 
 	// Count number of instances
 	var paasCount *int
