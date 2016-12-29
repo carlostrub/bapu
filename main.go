@@ -117,7 +117,7 @@ func main() {
 	var strs []string
 	list := *hostingVMList
 	for _, val := range list {
-		strs = append(strs, val.Hostname+" ("+val.State+")")
+		strs = append(strs, "["+strconv.Itoa(val.ID)+"] "+val.Hostname+" ("+val.State+")")
 	}
 
 	uiList := termui.NewList()
