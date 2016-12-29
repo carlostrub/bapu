@@ -84,13 +84,13 @@ func main() {
 	termui.Render(title, ls)
 
 	// Count number of instances
-	var paasCount *int
-	err = api.Call("paas.count", apiKey, &paasCount)
+	var iaasCount *int
+	err = api.Call("hosting.vm.count", apiKey, &iaasCount)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	count := termui.NewPar("# instances: " + strconv.Itoa(*paasCount))
+	count := termui.NewPar("# instances: " + strconv.Itoa(*iaasCount))
 	count.Border = false
 	count.Height = 1
 	count.TextFgColor = termui.ColorMagenta
@@ -101,8 +101,8 @@ func main() {
 	termui.Render(count)
 
 	// List instances
-	//	var paasList *int
-	//	err = api.Call("paas.count", apiKey, &paasCount)
+	//	var iaasList *int
+	//	err = api.Call("iaas.count", apiKey, &iaasCount)
 	//	if err != nil {
 	//		log.Fatal(err)
 	//	}
