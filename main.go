@@ -14,7 +14,7 @@ func main() {
 	// handle configurations for server
 	viper.SetConfigName("bapu")           // no need to include file extension
 	viper.AddConfigPath("/usr/local/etc") // set the path of your config file
-	viper.AddConfigPath("../bapu")        // set the path of your config file
+	viper.AddConfigPath("./")             // set the path of your config file
 
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -55,15 +55,9 @@ func main() {
 	defer termui.Close()
 
 	// Title
-	title := termui.NewPar("Bapu")
-	title.Border = false
-	title.Height = 1
-	title.TextFgColor = termui.ColorMagenta
-	title.Width = 10
-	title.X = 1
-	title.Y = 1
-
-	termui.Render(title)
+	uiTitle := termui.NewPar("Bapu")
+	uiTitle.Border = false
+	uiTitle.TextFgColor = termui.ColorMagenta
 
 	// Count number of instances
 	var hostingVMCount *int
@@ -72,15 +66,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	count := termui.NewPar("VM #: " + strconv.Itoa(*hostingVMCount))
-	count.Border = false
-	count.Height = 1
-	count.TextFgColor = termui.ColorWhite
-	count.Width = 20
-	count.X = 1
-	count.Y = 3
-
-	termui.Render(count)
+	uiCount := termui.NewPar("VM #: " + strconv.Itoa(*hostingVMCount))
+	uiCount.Border = false
+	uiCount.TextFgColor = termui.ColorWhite
 
 	// Define output structs
 	type DiskReturn struct {
@@ -132,15 +120,28 @@ func main() {
 		strs = append(strs, val.Hostname+" ("+val.State+")")
 	}
 
-	ls := termui.NewList()
-	ls.Items = strs
-	ls.ItemFgColor = termui.ColorYellow
-	ls.BorderLabel = "Servers"
-	ls.Height = 20
-	ls.Width = 80
-	ls.Y = 5
+	uiList := termui.NewList()
+	uiList.Items = strs
+	uiList.ItemFgColor = termui.ColorYellow
+	uiList.BorderLabel = "Servers"
+	uiList.Height = len(strs) + 2
 
-	termui.Render(ls)
+	// Create termui Grid system
+	termui.Body.AddRows(
+		termui.NewRow(
+			termui.NewCol(3, 0, uiTitle),
+		),
+		termui.NewRow(
+			termui.NewCol(2, 0, uiCount),
+		),
+		termui.NewRow(
+			termui.NewCol(10, 0, uiList),
+		),
+	)
+
+	// calculate layout
+	termui.Body.Align()
+	termui.Render(termui.Body)
 
 	// Quit with q
 	termui.Handle("/sys/kbd/q", func(termui.Event) {
@@ -148,7 +149,17 @@ func main() {
 	})
 
 	termui.Handle("/sys/kbd/<up>", func(termui.Event) {
-		termui.Render(ls)
+		termui.Body.Align()
+		termui.Render(termui.Body)
+	})
+
+	termui.Handle("/timer/1s", func(e termui.Event) {
+		t := e.Data.(termui.EvtTimer)
+		// t is a EvtTimer
+		if t.Count%2 == 0 {
+			termui.Body.Align()
+			termui.Render(termui.Body)
+		}
 	})
 
 	termui.Loop()
