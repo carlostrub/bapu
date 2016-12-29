@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"strconv"
+	"time"
 
 	"github.com/gizak/termui"
 	"github.com/kolo/xmlrpc"
@@ -62,16 +63,48 @@ func main() {
 	title.X = 1
 	title.Y = 1
 
-	// List
-	strs := []string{
-		"[0] github.com/gizak/termui",
-		"[1] [你好，世界](fg-blue)",
-		"[2] [こんにちは世界](fg-red)",
-		"[3] [color output](fg-white,bg-green)",
-		"[4] output.go",
-		"[5] random_out.go",
-		"[6] dashboard.go",
-		"[7] nsf/termbox-go"}
+	termui.Render(title)
+
+	// Count number of instances
+	var hostingVMCount *int
+	err = api.Call("hosting.vm.count", apiKey, &hostingVMCount)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	count := termui.NewPar("VM #: " + strconv.Itoa(*hostingVMCount))
+	count.Border = false
+	count.Height = 1
+	count.TextFgColor = termui.ColorWhite
+	count.Width = 20
+	count.X = 1
+	count.Y = 3
+
+	termui.Render(count)
+
+	// List instances
+	type VMReturn struct {
+		AiActive     int       `xmlrpc:"ai_active"`
+		Console      int       `xmlrpc:"console"`
+		Cores        int       `xmlrpc:"cores"`
+		DatacenterID int       `xmlrpc:"datacenter_id"`
+		DateCreated  time.Time `xmlrpc:"date_created"`
+		DateUpdated  time.Time `xmlrpc:"date_updated"`
+		Description  string    `xmlrpc:"description"`
+		Hostname     string    `xmlrpc:"hostname"`
+	}
+
+	var hostingVMList *[]VMReturn
+	err = api.Call("hosting.vm.list", apiKey, &hostingVMList)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var strs []string
+	list := *hostingVMList
+	for _, val := range list {
+		strs = append(strs, val.Hostname)
+	}
 
 	ls := termui.NewList()
 	ls.Items = strs
@@ -79,33 +112,9 @@ func main() {
 	ls.BorderLabel = "Servers"
 	ls.Height = 20
 	ls.Width = 80
-	ls.Y = 4
+	ls.Y = 5
 
-	termui.Render(title, ls)
-
-	// Count number of instances
-	var iaasCount *int
-	err = api.Call("hosting.vm.count", apiKey, &iaasCount)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	count := termui.NewPar("# instances: " + strconv.Itoa(*iaasCount))
-	count.Border = false
-	count.Height = 1
-	count.TextFgColor = termui.ColorMagenta
-	count.Width = 20
-	count.X = 1
-	count.Y = 2
-
-	termui.Render(count)
-
-	// List instances
-	//	var iaasList *int
-	//	err = api.Call("iaas.count", apiKey, &iaasCount)
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
+	termui.Render(ls)
 
 	// Quit with q
 	termui.Handle("/sys/kbd/q", func(termui.Event) {
