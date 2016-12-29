@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 
@@ -12,26 +11,29 @@ import (
 
 func main() {
 	// handle configurations for server
-	viper.SetConfigName("bapu") // no need to include file extension
-	viper.AddConfigPath("")     // set the path of your config file
+	viper.SetConfigName("bapu")           // no need to include file extension
+	viper.AddConfigPath("/usr/local/etc") // set the path of your config file
+	viper.AddConfigPath("../bapu")        // set the path of your config file
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Println("Config file not found...")
+		log.Fatal(err)
 	}
-	development := viper.GetBool("development.enabled")
 
-	if development {
-		fmt.Printf("\nDevelopment Config found")
-	}
-	apiKey := viper.GetString("apiKey")
-
+	apiKey := viper.GetString("production.apiKey")
 	api, err := xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	development := viper.GetBool("development.enabled")
 	if development {
+		log.Println("Development Config found")
 		api, err = xmlrpc.NewClient("https://rpc.ote.gandi.net/xmlrpc/", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
+		apiKey = viper.GetString("development.apiKey")
 	}
 
 	// initialize termui

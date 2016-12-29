@@ -1,7 +1,7 @@
 [development]
-apiKey = PUTYOURKEYHERE 
+apiKey = "PUTYOURKEYHERE"
 enabled = true
 
 [production]
-apiKey = PUTYOURKEYHERE
-enabled = true
+apiKey = "PUTYOURKEYHERE"
+enabled = false
