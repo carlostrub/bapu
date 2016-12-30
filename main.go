@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"os"
 	"strconv"
@@ -11,8 +12,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func main() {
-	// handle configurations for server
+// LoadAPI returns the api and apiKey according to the settings defined in the
+// configuration file, respectively.
+func LoadAPI() (api *xmlrpc.Client, apiKey string, err error) {
 	viper.SetConfigName("bapu")
 
 	homePath := os.Getenv("HOME")
@@ -20,20 +22,17 @@ func main() {
 	viper.AddConfigPath("/usr/local/etc")
 	viper.AddConfigPath("/etc")
 
-	err := viper.ReadInConfig()
+	err = viper.ReadInConfig()
 	if err != nil {
-		log.Fatal(err)
+		return api, apiKey, err
 	}
-
-	var apiKey string
-	var api *xmlrpc.Client
 
 	production := viper.GetBool("production.enabled")
 	if production {
 		apiKey = viper.GetString("production.apiKey")
 		api, err = xmlrpc.NewClient("https://rpc.gandi.net/xmlrpc/", nil)
 		if err != nil {
-			log.Fatal(err)
+			return api, apiKey, err
 		}
 	}
 
@@ -42,13 +41,23 @@ func main() {
 		log.Println("Development Config found")
 		api, err = xmlrpc.NewClient("https://rpc.ote.gandi.net/xmlrpc/", nil)
 		if err != nil {
-			log.Fatal(err)
+			return api, apiKey, err
 		}
 		apiKey = viper.GetString("development.apiKey")
 	}
 
 	if api == nil {
-		log.Fatal("neither production nor development environment enabled in config")
+		return api, apiKey, errors.New("neither production nor development environment enabled in config")
+	}
+
+	return api, apiKey, nil
+}
+
+func main() {
+	// Load API
+	api, apiKey, err := LoadAPI()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// initialize termui
