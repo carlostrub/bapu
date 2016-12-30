@@ -1,7 +1,7 @@
 # Bapu
 
 ## What is Bapu
-Bapu allows you to manage your Gandi servers.
+Bapu allows you to manage your Gandi virtual machines.
 
 ## How to start
 Log into your Gandi.net account and then visit the
