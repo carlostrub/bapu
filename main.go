@@ -63,7 +63,7 @@ func main() {
 	// initialize termui
 	err = termui.Init()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer termui.Close()
 
