@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"strconv"
 	"time"
 
@@ -12,9 +13,12 @@ import (
 
 func main() {
 	// handle configurations for server
-	viper.SetConfigName("bapu")           // no need to include file extension
-	viper.AddConfigPath("/usr/local/etc") // set the path of your config file
-	viper.AddConfigPath("./")             // set the path of your config file
+	viper.SetConfigName("bapu")
+
+	homePath := os.Getenv("HOME")
+	viper.AddConfigPath(homePath)
+	viper.AddConfigPath("/usr/local/etc")
+	viper.AddConfigPath("/etc")
 
 	err := viper.ReadInConfig()
 	if err != nil {
