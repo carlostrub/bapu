@@ -68,8 +68,9 @@ func main() {
 	defer termui.Close()
 
 	// Title
-	uiTitle := termui.NewPar("Bapu")
-	uiTitle.Border = false
+	uiTitle := termui.NewPar("Bapu -- Control your Gandi Machines")
+	uiTitle.Border = true
+	uiTitle.Height = 3
 	uiTitle.TextFgColor = termui.ColorMagenta
 
 	// Count number of instances
@@ -80,7 +81,6 @@ func main() {
 	}
 
 	uiCount := termui.NewPar("VM #: " + strconv.Itoa(*hostingVMCount))
-	uiCount.Border = false
 	uiCount.TextFgColor = termui.ColorWhite
 
 	// Define output structs
@@ -142,7 +142,7 @@ func main() {
 	// Create termui Grid system
 	termui.Body.AddRows(
 		termui.NewRow(
-			termui.NewCol(3, 0, uiTitle),
+			termui.NewCol(12, 0, uiTitle),
 		),
 		termui.NewRow(
 			termui.NewCol(2, 0, uiCount),
