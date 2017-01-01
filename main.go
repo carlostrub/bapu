@@ -269,21 +269,21 @@ func main() {
 	})
 
 	termui.Handle("/sys/kbd/s", func(termui.Event) {
-		err = api.Call("hosting.vm.start", apiKey, list[selector].ID)
+		err = api.Call("hosting.vm.start", []interface{}{apiKey, list[selector].ID}, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
 	})
 
 	termui.Handle("/sys/kbd/o", func(termui.Event) {
-		err = api.Call("hosting.vm.stop", apiKey, list[selector].ID)
+		err = api.Call("hosting.vm.stop", []interface{}{apiKey, list[selector].ID}, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
 	})
 
 	termui.Handle("/sys/kbd/r", func(termui.Event) {
-		err = api.Call("hosting.vm.reboot", apiKey, list[selector].ID)
+		err = api.Call("hosting.vm.reboot", []interface{}{apiKey, list[selector].ID}, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
