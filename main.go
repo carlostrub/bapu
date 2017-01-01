@@ -168,7 +168,7 @@ func main() {
 
 	info := *hostingAccountInfo
 
-	uiSummary := termui.NewPar("Owner: " + info.FullName + "    Virtual Machines: " + strconv.Itoa(*hostingVMCount) + "    Remaining Credit: " + strconv.Itoa(info.Credits) + ":::" + strconv.Itoa(selector))
+	uiSummary := termui.NewPar("Owner: " + info.FullName + "    Virtual Machines: " + strconv.Itoa(*hostingVMCount) + "    Remaining Credit: " + strconv.Itoa(info.Credits))
 	uiSummary.Height = 3
 	uiSummary.Border = true
 	uiSummary.BorderLabel = "Summary"
@@ -182,10 +182,9 @@ func main() {
 	}
 
 	list := *hostingVMList
-	servers := serverList(list)
 
 	uiTable := termui.NewTable()
-	uiTable.Rows = servers
+	uiTable.Rows = serverList(list)
 	uiTable.FgColor = termui.ColorWhite
 	uiTable.BgColor = termui.ColorDefault
 	uiTable.TextAlign = termui.AlignCenter
@@ -221,7 +220,7 @@ func main() {
 	}
 
 	// Commands
-	uiCommands := termui.NewPar("<[S]tart>    <St[o]p>    <[R]eboot>")
+	uiCommands := termui.NewPar("<[S]tart>    <St[o]p>    <[R]eboot>  Virtual Machine |   <[Q]uit>")
 	uiCommands.Height = 3
 	uiCommands.Border = false
 	uiCommands.BorderLabel = "Summary"
@@ -257,16 +256,37 @@ func main() {
 		if selector > 0 {
 			selector--
 		}
-		servers = serverList(list)
+		uiTable.Rows = serverList(list)
 		termui.Render(termui.Body)
 	})
 
 	termui.Handle("/sys/kbd/<down>", func(termui.Event) {
-		if selector < len(list) {
+		if selector < len(list)-1 {
 			selector++
 		}
-		servers = serverList(list)
+		uiTable.Rows = serverList(list)
 		termui.Render(termui.Body)
+	})
+
+	termui.Handle("/sys/kbd/s", func(termui.Event) {
+		err = api.Call("hosting.vm.start", apiKey, list[selector].ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	termui.Handle("/sys/kbd/o", func(termui.Event) {
+		err = api.Call("hosting.vm.stop", apiKey, list[selector].ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	termui.Handle("/sys/kbd/r", func(termui.Event) {
+		err = api.Call("hosting.vm.reboot", apiKey, list[selector].ID)
+		if err != nil {
+			log.Fatal(err)
+		}
 	})
 
 	termui.Handle("/timer/1s", func(e termui.Event) {
