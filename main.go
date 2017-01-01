@@ -297,6 +297,42 @@ func main() {
 			termui.Render(termui.Body)
 		}
 	})
+	termui.Handle("/timer/1s", func(e termui.Event) {
+		t := e.Data.(termui.EvtTimer)
+		// t is a EvtTimer
+		if t.Count%4 == 0 {
+			err = api.Call("hosting.vm.list", apiKey, &hostingVMList)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			list = *hostingVMList
+			uiTable.Rows = serverList(list)
+			for i := 0; i < len(list); i++ {
+				switch list[i].State {
+				case "paused":
+					uiTable.BgColors[i+1] = termui.ColorBlack
+					uiTable.FgColors[i+1] = termui.ColorWhite
+				case "running":
+					uiTable.BgColors[i+1] = termui.ColorBlue
+					uiTable.FgColors[i+1] = termui.ColorWhite
+				case "halted":
+					uiTable.BgColors[i+1] = termui.ColorYellow
+					uiTable.FgColors[i+1] = termui.ColorBlack
+				case "locked":
+					uiTable.BgColors[i+1] = termui.ColorMagenta
+					uiTable.FgColors[i+1] = termui.ColorGreen
+				case "being_created":
+					uiTable.BgColors[i+1] = termui.ColorWhite
+					uiTable.FgColors[i+1] = termui.ColorBlack
+				case "deleted":
+					uiTable.BgColors[i+1] = termui.ColorBlack
+					uiTable.FgColors[i+1] = termui.ColorRed
+				}
+			}
+			termui.Render(termui.Body)
+		}
+	})
 
 	termui.Loop()
 }
