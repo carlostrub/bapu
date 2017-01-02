@@ -1,5 +1,5 @@
 hash: e5574737ff9ef99f0c7e7e805322be6a7c917c0d9944d5a545153bebc5802e7d
-updated: 2016-12-29T23:06:00.511243721Z
+updated: 2017-01-02T19:16:51.856430592Z
 imports:
 - name: github.com/fsnotify/fsnotify
   version: fd9ec7deca8bf46ecd2a795baaacf2b3a9be1197
@@ -53,7 +53,7 @@ imports:
   subpackages:
   - unix
 - name: golang.org/x/text
-  version: a49bea13b776691cb1b49873e5d8df96ec74831a
+  version: fd889fe3a20f4878f5f47672fd3ca5b86db005e2
   subpackages:
   - transform
   - unicode/norm
