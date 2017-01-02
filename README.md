@@ -1,7 +1,10 @@
 # Bapu
 
 ## What is Bapu
-Bapu allows you to manage your Gandi virtual machines.
+Bapu provides a graphical interface to manage your virtual machines on
+[Gandi](https://www.gandi.net/).
+
+<img src="./bapu-screenshot.png" alt="Screenshot of Bapu" width="80%">
 
 ## How to start
 Log into your Gandi.net account and then visit the
