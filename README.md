@@ -4,7 +4,7 @@
 Bapu provides a graphical interface to manage your virtual machines on
 [Gandi](https://www.gandi.net/).
 
-<img src="./bapu-screenshot.png" alt="Screenshot of Bapu" width="80%">
+![Bapu screenshot](bapu-screenshot.png)
 
 ## How to start
 Log into your Gandi.net account and then visit the
