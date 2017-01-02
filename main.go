@@ -1,3 +1,6 @@
+// Copyright 2017, Carlo Strub <cs@carlostrub.ch>
+// BSD 3-Clause License, see LICENSE file for details.
+
 package main
 
 import (
