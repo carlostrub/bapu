@@ -273,6 +273,13 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		confirmation := termui.NewPar(list[selector].Hostname + " (ID " + strconv.Itoa(list[selector].ID) + ") is being started")
+		confirmation.Height = 4
+		confirmation.Width = 50
+		confirmation.Y = 5
+		confirmation.Border = true
+		termui.Render(confirmation)
 	})
 
 	termui.Handle("/sys/kbd/o", func(termui.Event) {
@@ -280,6 +287,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		confirmation := termui.NewPar(list[selector].Hostname + " (ID " + strconv.Itoa(list[selector].ID) + ") is being stopped")
+		confirmation.Height = 4
+		confirmation.Width = 50
+		confirmation.Y = 5
+		confirmation.Border = true
+		termui.Render(confirmation)
 	})
 
 	termui.Handle("/sys/kbd/r", func(termui.Event) {
@@ -287,6 +300,12 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		confirmation := termui.NewPar(list[selector].Hostname + " (ID " + strconv.Itoa(list[selector].ID) + ") is being rebooted")
+		confirmation.Height = 4
+		confirmation.Width = 50
+		confirmation.Y = 5
+		confirmation.Border = true
+		termui.Render(confirmation)
 	})
 
 	termui.Handle("/timer/1s", func(e termui.Event) {
