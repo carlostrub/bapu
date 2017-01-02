@@ -10,7 +10,12 @@ Bapu provides a graphical interface to manage your virtual machines on
 Log into your Gandi.net account and then visit the
 [API Management Page](https://www.gandi.net/admin/api_key).
 
-Create an API key by clicking the respective button.
+Create an API key by clicking the respective buttons.
+
+Copy the API key into the configuration file `bapu.toml` (you find a sample
+file with the distribution).
+
+Finally, start bapu.
 
 ## Contribution
 All contributions are most welcome. Development of this project is on
